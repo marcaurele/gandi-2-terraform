@@ -1,0 +1,24 @@
+[tool.poetry]
+name = "gandi-2-terraform"
+version = "0.1.0"
+description = "CLI to read Gandi.net live DNS records and generate corresponding TF files"
+readme = 'README.md'
+authors = ["Marc-Aurèle Brothier <m@brothier.org>"]
+packages = [
+  { include = "gandi_tf" },
+]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+requests = "^2.27.1"
+click = "^8.0.3"
+
+[tool.poetry.dev-dependencies]
+pytest = "^5.2"
+
+[tool.poetry.scripts]
+gandi-2tf = "gandi_tf.main:generate"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
