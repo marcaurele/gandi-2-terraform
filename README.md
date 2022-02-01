@@ -11,10 +11,9 @@ records' resources.
 
 ## Install
 
-```
-pip install gandi-2-terraform
-
-gandi-tf-gen --help
+```console
+$ pip install gandi-2-terraform
+$ gandi-2tf --help
 ```
 
 ## Configuration
