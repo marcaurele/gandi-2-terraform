@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "gandi-2-terraform"
-version = "0.2.0"
+version = "0.3.dev0"
 description = "CLI to read Gandi.net live DNS records and generate corresponding TF files"
 readme = 'README.md'
 license = "MIT"
