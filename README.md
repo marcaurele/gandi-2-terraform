@@ -5,15 +5,14 @@
 [![Build status](https://github.com/marcaurele/gandi-2-terraform/workflows/Build%20status/badge.svg)](https://github.com/marcaurele/gandi-2-terraform/actions)
 
 
-This tool aims to simplify managin DNS recods using Terrafom by making the initial import through a single operation. It fetches DNS records from one or multiple domains you
-own with [Gandi.net](https://gandi.et) and generates TF files with the corresponding
-records' resources.
+This tool aims to simplify managin DNS recods using Terrafom by making the initial import through a single operation.
+It fetches DNS records from one or multiple domains you own with [Gandi.net](https://gandi.et) and generates TF files with the corresponding records' resources using `gandi_livedns_record` and defining each record in a set (see the example output).
 
 ## Install
 
 ```console
 $ pip install gandi-2-terraform
-$ gandi-2tf --help
+$ gandi2tf --help
 ```
 
 ## Configuration

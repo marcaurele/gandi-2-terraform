@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "gandi-2-terraform"
 version = "0.3.dev0"
-description = "CLI to read Gandi.net live DNS records and generate corresponding TF files"
+description = "CLI to read Gandi.net live DNS records and generate corresponding TF gandi_livedns_record resources"
 readme = 'README.md'
 license = "MIT"
 authors = ["Marc-Aurèle Brothier <m@brothier.org>"]
@@ -32,7 +32,7 @@ flake8-import-order = "^0.18.1"
 black = "^22.1.0"
 
 [tool.poetry.scripts]
-gandi-2tf = "gandi_tf.main:generate"
+gandi2tf = "gandi_tf.main:generate"
 
 [tool.poetry.urls]
 "Bug Tracker" = "https://github.com/marcaurele/gandi-2-terraform/issues"
