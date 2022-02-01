@@ -34,6 +34,10 @@ def parse_content(content):
         ttl = int(words[1])
         value = words[4].replace('"', '\\"')
         key = f"{r_name}_{r_type.lower()}".replace("@", "apex")
+
+        if r_type == "SOA":
+            continue
+
         if key[0].isnumeric():
             key = f"_{key}"
         elif key[0] == "*":
