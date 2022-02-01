@@ -24,7 +24,7 @@ In order to access the DNS records through the API, you have to provide your API
 
 ```console
 $ export GANDI_KEY=A1b2C3d4E5f6
-$ gandi-2tf --domain example.com
+$ gandi-2tf example.com
 ```
 
 will generate a file `example.com.tf` containing:

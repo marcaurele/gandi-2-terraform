@@ -89,9 +89,9 @@ def generate_tf(domain, entries):
     return commands
 
 
-@click.command(no_args_is_help=True)
-@click.option("--domain", "-d", "domains", help="Domain name to fetch from Gandi", multiple=True)
+@click.command()
 @click.option("--version", help="Display version information", is_flag=True)
+@click.argument("domains", nargs=-1)
 def generate(domains, version):
     if version:
         import importlib.metadata
