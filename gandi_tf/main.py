@@ -52,18 +52,18 @@ def generate_tf(domain, entries):
     commands = []
     with click.open_file(filename, "w") as f:
         f.write("locals {\n")
-        f.write(f"{tf_name}_records = " + "{\n")
+        f.write(f"  {tf_name}_records = " + "{\n")
 
         for key, record in entries.items():
-            f.write(f"{key} = {{\n")
-            f.write(f'name = "{record.name}"\n')
-            f.write(f'type = "{record.r_type}"\n')
-            f.write(f"ttl = {record.ttl}\n")
-            f.write("values = [\n")
+            f.write(f"    {key} = {{\n")
+            f.write(f'      name = "{record.name}"\n')
+            f.write(f'      type = "{record.r_type}"\n')
+            f.write(f"      ttl  = {record.ttl}\n")
+            f.write("      values = [\n")
             for value in record.values:
-                f.write(f'"{value}",\n')
-            f.write("]\n")
-            f.write("}\n")
+                f.write(f'        "{value}",\n')
+            f.write("      ]\n")
+            f.write("    }\n")
 
             commands.append(
                 "terraform import "
@@ -71,15 +71,15 @@ def generate_tf(domain, entries):
                 f'"{domain}/{record.name}/{record.r_type}"'
             )
 
-        f.write("}\n}\n\n")
+        f.write("  }\n}\n\n")
 
         f.write(f'resource "gandi_livedns_record" "{tf_name}" {{\n')
-        f.write(f"for_each = local.{tf_name}_records\n\n")
-        f.write(f'zone   = "{domain}"\n\n')
-        f.write("name   = each.value.name\n")
-        f.write("ttl    = each.value.ttl\n")
-        f.write("type   = each.value.type\n")
-        f.write("values = each.value.values\n")
+        f.write(f"  for_each = local.{tf_name}_records\n\n")
+        f.write(f'  zone = "{domain}"\n\n')
+        f.write("  name   = each.value.name\n")
+        f.write("  ttl    = each.value.ttl\n")
+        f.write("  type   = each.value.type\n")
+        f.write("  values = each.value.values\n")
         f.write("}\n")
 
     return commands
