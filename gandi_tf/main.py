@@ -1,9 +1,11 @@
-import click
-import requests
 import os
 
+import click
 
-class Record():
+import requests
+
+
+class Record:
     def __init__(self, name, r_type, ttl, value) -> None:
         self.name = name
         self.r_type = r_type
@@ -17,7 +19,7 @@ def fetch_records(domain):
         headers={
             "X-Api-Key": os.getenv("GANDI_KEY"),
             "Accept": "text/plain",
-        }
+        },
     )
     r.raise_for_status()
     return r.text
@@ -34,9 +36,9 @@ def parse_content(content):
         key = f"{r_name}_{r_type.lower()}".replace("@", "apex")
         if key[0].isnumeric():
             key = f"_{key}"
-        elif key[0] == '*':
+        elif key[0] == "*":
             key = key[1:]
-        key = key.replace('.', '_')
+        key = key.replace(".", "_")
         if key in entries:
             entries.get(key).values.append(value)
         else:
@@ -46,7 +48,7 @@ def parse_content(content):
 
 def generate_tf(domain, entries):
     filename = f"{domain}.tf"
-    tf_name = domain.replace('.', '_')
+    tf_name = domain.replace(".", "_")
     commands = []
     with click.open_file(filename, "w") as f:
         f.write("locals {\n")
@@ -54,25 +56,26 @@ def generate_tf(domain, entries):
 
         for key, record in entries.items():
             f.write(f"{key} = {{\n")
-            f.write(f"name = \"{record.name}\"\n")
-            f.write(f"type = \"{record.r_type}\"\n")
+            f.write(f'name = "{record.name}"\n')
+            f.write(f'type = "{record.r_type}"\n')
             f.write(f"ttl = {record.ttl}\n")
             f.write("values = [\n")
             for value in record.values:
-                f.write(f"\"{value}\",\n")
+                f.write(f'"{value}",\n')
             f.write("]\n")
             f.write("}\n")
 
             commands.append(
                 "terraform import "
                 f"'gandi_livedns_record.{tf_name}[\"{key}\"]' "
-                f"\"{domain}/{record.name}/{record.r_type}\"")
+                f'"{domain}/{record.name}/{record.r_type}"'
+            )
 
         f.write("}\n}\n\n")
 
-        f.write(f"resource \"gandi_livedns_record\" \"{tf_name}\" {{\n")
+        f.write(f'resource "gandi_livedns_record" "{tf_name}" {{\n')
         f.write(f"for_each = local.{tf_name}_records\n\n")
-        f.write(f"zone   = \"{domain}\"\n\n")
+        f.write(f'zone   = "{domain}"\n\n')
         f.write("name   = each.value.name\n")
         f.write("ttl    = each.value.ttl\n")
         f.write("type   = each.value.type\n")
@@ -80,7 +83,6 @@ def generate_tf(domain, entries):
         f.write("}\n")
 
     return commands
-
 
 
 @click.command(no_args_is_help=True)

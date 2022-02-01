@@ -9,15 +9,25 @@ packages = [
 ]
 
 [tool.poetry.dependencies]
-python = "^3.9"
+python = "^3.8"
 requests = "^2.27.1"
 click = "^8.0.3"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
+flake8 = "^4.0.1"
+flake8-import-order = "^0.18.1"
+black = "^22.1.0"
 
 [tool.poetry.scripts]
 gandi-2tf = "gandi_tf.main:generate"
+
+[tool.poetry.urls]
+"Bug Tracker" = "https://github.com/marcaurele/gandi-2-terraform/issues"
+
+[tool.black]
+target-version = ["py38", "py39", "py310"]
+line-length = 119
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
