@@ -93,12 +93,17 @@ def generate_tf(domain, entries):
 @click.option("--version", help="Display version information", is_flag=True)
 @click.argument("domains", nargs=-1)
 def generate(domains, version):
+    """
+    Command to read Gandi.net live DNS records and generate
+    corresponding TF gandi_livedns_record resources.
+    """
     if version:
         import importlib.metadata
 
         _version = importlib.metadata.version("gandi-2-terraform")
         click.echo(f"Version {_version}")
         return
+
     commands = []
     for domain in domains:
         content = fetch_records(domain)
