@@ -1,11 +1,23 @@
 [tool.poetry]
 name = "gandi-2-terraform"
-version = "0.1.0"
+version = "0.2.dev0"
 description = "CLI to read Gandi.net live DNS records and generate corresponding TF files"
 readme = 'README.md'
+license = "MIT"
 authors = ["Marc-Aurèle Brothier <m@brothier.org>"]
 packages = [
   { include = "gandi_tf" },
+]
+repository = "https://github.com/marcaurele/gandi-2-terraform"
+homepage = "https://github.com/marcaurele/gandi-2-terraform"
+keywords = ['gandi', 'terraform', 'DNS']
+classifiers = [
+  "Topic :: Internet :: Name Service (DNS)",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "License :: OSI Approved :: MIT License"
 ]
 
 [tool.poetry.dependencies]

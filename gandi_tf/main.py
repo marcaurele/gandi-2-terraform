@@ -87,7 +87,15 @@ def generate_tf(domain, entries):
 
 @click.command(no_args_is_help=True)
 @click.option("--domain", "-d", "domains", help="Domain name to fetch from Gandi", multiple=True)
-def generate(domains):
+@click.option("--version", help="Display version information", is_flag=True)
+def generate(domains, version):
+    if version:
+        import importlib.metadata
+
+        _version = importlib.metadata.version("gandi-2-terraform")
+        click.echo(f"Version {_version}")
+        return
+    commands = []
     for domain in domains:
         content = fetch_records(domain)
         entries = parse_content(content)
