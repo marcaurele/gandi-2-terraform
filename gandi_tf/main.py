@@ -89,7 +89,7 @@ def generate_tf(domain, entries):
     return commands
 
 
-@click.command()
+@click.command(no_args_is_help=True)
 @click.option("--version", help="Display version information", is_flag=True)
 @click.argument("domains", nargs=-1)
 def generate(domains, version):
