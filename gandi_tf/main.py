@@ -42,6 +42,7 @@ def parse_content(content):
             key = f"_{key}"
         elif key[0] == "*":
             key = key[1:]
+
         key = key.replace(".", "_")
         if key in entries:
             entries.get(key).values.append(value)
@@ -64,6 +65,7 @@ def generate_tf(domain, entries):
             f.write(f'      type = "{record.r_type}"\n')
             f.write(f"      ttl  = {record.ttl}\n")
             f.write("      values = [\n")
+
             for value in record.values:
                 f.write(f'        "{value}",\n')
             f.write("      ]\n")
@@ -99,7 +101,6 @@ def generate(domains, version):
     """
     if version:
         import importlib.metadata
-
         _version = importlib.metadata.version("gandi-2-terraform")
         click.echo(f"Version {_version}")
         return
@@ -108,7 +109,8 @@ def generate(domains, version):
     for domain in domains:
         content = fetch_records(domain)
         entries = parse_content(content)
-        commands = generate_tf(domain, entries)
+        commands += generate_tf(domain, entries)
+
     for cmd in commands:
         click.echo(cmd)
 
