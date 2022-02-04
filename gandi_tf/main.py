@@ -101,6 +101,7 @@ def generate(domains, version):
     """
     if version:
         import importlib.metadata
+
         _version = importlib.metadata.version("gandi-2-terraform")
         click.echo(f"Version {_version}")
         return
