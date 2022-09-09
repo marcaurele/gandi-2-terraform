@@ -152,18 +152,20 @@ def generate_tf(domain, entries, subdir):
 @click.command(no_args_is_help=True)
 @click.option("--version", help="Display version information", is_flag=True)
 @click.option("--organization_id", help="Gandi organization ID (passing an organization ID will limit query on domain own by organization)", default=None)
-@click.option("--list_domains", help="Fetch and display fqdn_unicodde", is_flag=True)
+@click.option("--list_domains", help="Fetch and display fqdn_unicode", is_flag=True)
 @click.option("--list_domains_details", help="Fetch and display all domain details", is_flag=True)
 @click.option("--list_organizations", help="Fetch and display all organizations details", is_flag=True)
 @click.option('--nsfilters', help="Filter domaine based on their current nameserver 'abc','livedns' or 'other'. You can add multiple filter Example: gandi2tf --list_domains --nsfilters abc --nsfilters livedns)", multiple=True, default=[
 'abc','livedns','other'])
-@click.option("--auto_generate", help="Auto-generate tf resource based on domain from gandi instead of STDIN/USERINPUT (option can be used with --organization_id and multiple --nsfilters)", is_flag=True)
+@click.option("--auto_generate", help="Auto-generate tf resource based on domain from gandi instead of STDIN/USERINPUT (option can be used with --organization_id, --subdir and multiple --nsfilters)", is_flag=True)
 @click.option("--subdir", help="Create a sub-directory to store generated domain tf and tf import command", is_flag=True)
 @click.argument("domains", nargs=-1)
 def generate(domains, version, organization_id, list_domains, list_domains_details, list_organizations, nsfilters, auto_generate, subdir):
     """
     Command to read Gandi.net live DNS records and generate
     corresponding TF gandi_livedns_record resources.
+
+    Warning: nameserver type 'other' and 'abc' can't be managed via terraform (for abc domain you can transfert them to livedns on gandi webinterface)
     """
     for filter in nsfilters:
         if filter not in ['abc','livedns','other']:
