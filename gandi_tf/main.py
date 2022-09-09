@@ -12,9 +12,6 @@ class Record:
 
 
 def fetch_records(domain):
-    # When domain contain a - api call return a 404 encoding it work
-    domain = domain.replace("-", "%2D")
-    print(domain)
     r = requests.get(
         f"https://dns.api.gandi.net/api/v5/domains/{domain}/records",
         headers={
