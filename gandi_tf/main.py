@@ -165,7 +165,7 @@ def generate(domains, version, organization_id, list_domains, list_domains_detai
     Command to read Gandi.net live DNS records and generate
     corresponding TF gandi_livedns_record resources.
 
-    Warning: nameserver type 'other' and 'abc' can't be managed via terraform (for abc domain you can transfert them to livedns on gandi webinterface)
+    Warning: nameserver type 'other' and 'abc' can't be managed via terraform (for abc domain you can transfer them to livedns on gandi webinterface)
     """
     for filter in nsfilters:
         if filter not in ['abc','livedns','other']:
