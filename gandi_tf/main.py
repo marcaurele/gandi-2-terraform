@@ -109,6 +109,12 @@ def generate_tf(domain, entries, subdir):
     else:
         filename = f"{domain}.tf"
     tf_name = domain.replace(".", "_")
+    ## TF resource can't start with number should be either _ or a letter so domain like 1984.com will generate error with terraform
+    try:
+        c0 = int(tf_name[0])
+        tf_name = "_" + tf_name
+    except ValueError as e:
+        pass
     commands = []
     with click.open_file(filename, "w") as f:
         f.write("locals {\n")
