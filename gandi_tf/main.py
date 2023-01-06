@@ -133,8 +133,7 @@ def generate_tf(domain, entries, subdir):
 @click.command(no_args_is_help=True)
 @click.option("--version", help="Display version information", is_flag=True)
 @click.option("--organization_id", help="To list domains only owned by this organization id", default=None)
-@click.option('--nsfilters', type=click.Choice(['abc','livedns','other'], case_sensitive=True), help="Filter domaine based on their current nameserver 'abc','livedns' or 'other'. You can add multiple filter Example: gandi2tf --list_domains --nsfilters abc --nsfilters livedns)", multiple=True, default=[
-'abc',' ','other'])
+@click.option('--nsfilters', type=click.Choice(['abc','livedns','other'], case_sensitive=True), help="Filter domaine based on their current nameserver 'abc','livedns' or 'other'. You can add multiple filter Example: gandi2tf --list_domains --nsfilters abc --nsfilters livedns)", multiple=True, default=['abc','livedns','other'])
 @click.option("--auto-generate", help="Auto-generate tf resources based on domain from gandi instead of STDIN/USERINPUT (option can be used with --organization_id, --subdir and multiple --nsfilters)", is_flag=True)
 @click.option("--subdir", help="Create a sub-directory to store generated domain tf and tf import command", is_flag=True)
 @click.argument("domains", nargs=-1)
