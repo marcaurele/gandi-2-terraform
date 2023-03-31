@@ -74,13 +74,13 @@ def parse_content(content):
 
 
 def generate_tf(domain, entries, subdir):
-    if subdir is True:
+    if subdir:
         try:
-            os.mkdir( f"./{domain}", 0o755 )
+            os.mkdir(f"./{domain}")
         except OSError as error:
-            raise Exception(f"Error in generate_tf os.mkdir failed with error:{error}")
-        filename = f"./{domain}/{domain}.tf"
-        filename_tfimport = f"./{domain}/{domain}.tfimport"
+            raise Exception(f"Error in generate_tf os.mkdir failed with error: {error}")
+        filename = f"./{domain}/main.tf"
+        filename_tfimport = f"./{domain}/main.tfimport"
     else:
         filename = f"{domain}.tf"
     tf_name = domain.replace(".", "_")
