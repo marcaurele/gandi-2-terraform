@@ -139,18 +139,10 @@ def generate_tf(domain, entries, subdir):
 @click.option("--version", help="Display version information", is_flag=True)
 @click.option("--organization-id", help="Filter domains owned by this organization id only", default=None)
 @click.option(
-    "--nsfilters",
-    type=click.Choice(["abc", "livedns", "other"], case_sensitive=True),
-    help="Filter domains based on their current nameserver 'abc', 'livedns' or 'other'. "
-    + "You can add multiple filters. Example: gandi2tf --list-domains --nsfilters abc --nsfilters livedns)",
-    multiple=True,
-    default=["abc", "livedns", "other"],
-)
-@click.option(
-    "--subdir", help="Create a sub-directory to store generated domain tf code and tf import command", is_flag=True
+    "--subdir", help="Create a sub-directory to store generated domain tf code and tf import commands.", is_flag=True
 )
 @click.argument("domains", nargs=-1)
-def generate(domains, version, organization_id, nsfilters, subdir):
+def generate(domains, version, organization_id, subdir):
     """
     Command to read Gandi.net live DNS records and generate corresponding TF
     gandi_livedns_record resources.
@@ -166,17 +158,7 @@ def generate(domains, version, organization_id, nsfilters, subdir):
         return
 
     if len(domains) == 0:
-        domains_fetched = []
-        for domain in fetch_domains_list(organization_id):
-            if domain["nameserver"]["current"] in nsfilters:
-                if "livedns" not in domain["nameserver"]["current"]:
-                    click.echo(
-                        "Your are trying to auto_generate a tf from a domain not managed by Gandi check your nsfilters"
-                    )
-                    return
-                else:
-                    domains_fetched.append(domain["fqdn_unicode"])
-        domains = tuple(domains_fetched)
+        domains = tuple([domain["fqdn_unicode"] for domain in fetch_domains_list(organization_id)])
         if len(domains) == 0:
             click.echo("No domain found")
 
