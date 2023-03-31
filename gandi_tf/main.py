@@ -1,4 +1,5 @@
-import os, sys
+import os
+
 import click
 import requests
 
@@ -89,9 +90,9 @@ def generate_tf(domain, entries, subdir):
     # TF resource can't start with a number, it should start with either _ or a letter
     # so domain like 1984.com can have a valid file.
     try:
-        c0 = int(tf_name[0])
+        int(tf_name[0])
         tf_name = "_" + tf_name
-    except ValueError as e:
+    except ValueError:
         pass
     commands = []
     with click.open_file(filename, "w") as f:
