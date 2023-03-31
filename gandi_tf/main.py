@@ -24,24 +24,26 @@ def fetch_records(domain):
 
 
 def fetch_domains_list(organization_id):
-    payload = {'per_page': 1, 'sort_by': 'fqdn'}
+    payload = {"per_page": 1, "sort_by": "fqdn"}
     if organization_id is not None:
         payload["sharing_id"] = organization_id
 
     # Get total count of domain to fetch them all in one request
     fake_head = requests.get(
-        'https://api.gandi.net/v5/domain/domains',
-        headers={"authorization": f'Apikey {os.getenv("GANDI_KEY")}'}, params=payload
+        "https://api.gandi.net/v5/domain/domains",
+        headers={"authorization": f'Apikey {os.getenv("GANDI_KEY")}'},
+        params=payload,
     )
     fake_head.raise_for_status()
     total_count = fake_head.headers["total-count"]
     if organization_id is not None:
-        payload = {'per_page': total_count, 'sort_by': 'fqdn', 'sharing_id': organization_id}
+        payload = {"per_page": total_count, "sort_by": "fqdn", "sharing_id": organization_id}
     else:
-        payload = {'per_page': total_count, 'sort_by': 'fqdn'}
+        payload = {"per_page": total_count, "sort_by": "fqdn"}
     r = requests.get(
-        'https://api.gandi.net/v5/domain/domains',
-        headers={"authorization": f'Apikey {os.getenv("GANDI_KEY")}'}, params=payload
+        "https://api.gandi.net/v5/domain/domains",
+        headers={"authorization": f'Apikey {os.getenv("GANDI_KEY")}'},
+        params=payload,
     )
     r.raise_for_status()
     return r.json()
@@ -84,7 +86,8 @@ def generate_tf(domain, entries, subdir):
     else:
         filename = f"{domain}.tf"
     tf_name = domain.replace(".", "_")
-    ## TF resource can't start with number should be either _ or a letter so domain like 1984.com will generate error with terraform
+    # TF resource can't start with a number, it should start with either _ or a letter
+    # so domain like 1984.com can have a valid file.
     try:
         c0 = int(tf_name[0])
         tf_name = "_" + tf_name
@@ -132,16 +135,26 @@ def generate_tf(domain, entries, subdir):
 
 @click.command()
 @click.option("--version", help="Display version information", is_flag=True)
-@click.option("--organization-id", help="To list domains only owned by this organization id", default=None)
-@click.option('--nsfilters', type=click.Choice(['abc','livedns','other'], case_sensitive=True), help="Filter domains based on their current nameserver 'abc','livedns' or 'other'. You can add multiple filters. Example: gandi2tf --list-domains --nsfilters abc --nsfilters livedns)", multiple=True, default=['abc','livedns','other'])
-@click.option("--subdir", help="Create a sub-directory to store generated domain tf code and tf import command", is_flag=True)
+@click.option("--organization-id", help="Filter domains owned by this organization id only", default=None)
+@click.option(
+    "--nsfilters",
+    type=click.Choice(["abc", "livedns", "other"], case_sensitive=True),
+    help="Filter domains based on their current nameserver 'abc', 'livedns' or 'other'. "
+    + "You can add multiple filters. Example: gandi2tf --list-domains --nsfilters abc --nsfilters livedns)",
+    multiple=True,
+    default=["abc", "livedns", "other"],
+)
+@click.option(
+    "--subdir", help="Create a sub-directory to store generated domain tf code and tf import command", is_flag=True
+)
 @click.argument("domains", nargs=-1)
 def generate(domains, version, organization_id, nsfilters, subdir):
     """
-    Command to read Gandi.net live DNS records and generate
-    corresponding TF gandi_livedns_record resources.
+    Command to read Gandi.net live DNS records and generate corresponding TF
+    gandi_livedns_record resources.
 
-    Warning: nameserver type 'other' and 'abc' can't be managed via terraform (for abc domain you can transfer them to livedns on gandi webinterface)
+    Warning: nameserver type 'other' and 'abc' can't be managed via terraform
+    (for abc domain you can transfer them to livedns on gandi webinterface).
     """
     if version:
         import importlib.metadata
@@ -153,9 +166,11 @@ def generate(domains, version, organization_id, nsfilters, subdir):
     if len(domains) == 0:
         domains_fetched = []
         for domain in fetch_domains_list(organization_id):
-            if domain['nameserver']['current'] in nsfilters:
-                if "other" in domain['nameserver']['current']:
-                    click.echo("Your are trying to auto_generate a tf from a domain not managed by Gandi check your nsfilters")
+            if domain["nameserver"]["current"] in nsfilters:
+                if "livedns" not in domain["nameserver"]["current"]:
+                    click.echo(
+                        "Your are trying to auto_generate a tf from a domain not managed by Gandi check your nsfilters"
+                    )
                     return
                 else:
                     domains_fetched.append(domain["fqdn_unicode"])
