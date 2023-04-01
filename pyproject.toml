@@ -22,7 +22,7 @@ classifiers = [
 ]
 
 [tool.poetry.dependencies]
-python = "^3.8"
+python = ">=3.8.1,<4.0"
 requests = "^2.27.1"
 click = "^8.0.3"
 
@@ -38,9 +38,22 @@ gandi2tf = "gandi_tf.main:generate"
 [tool.poetry.urls]
 "Bug Tracker" = "https://github.com/marcaurele/gandi-2-terraform/issues"
 
+[tool.poetry.group.dev.dependencies]
+pylint = "^2.17.1"
+flake8 = "^6.0.0"
+
 [tool.black]
-target-version = ["py38", "py39", "py310"]
+target-version = ["py38", "py39", "py310", "py311"]
 line-length = 119
+
+[tool.flake8]
+max-line-length = 119
+
+[tool.pylint]
+max-line-length = 119
+
+[tool.isort]
+line_length = 119
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
