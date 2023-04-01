@@ -37,11 +37,10 @@ def fetch_domains_list(organization_id):
         params=payload,
     )
     fake_head.raise_for_status()
-    total_count = fake_head.headers["total-count"]
-    if organization_id is not None:
-        payload = {"per_page": total_count, "sort_by": "fqdn", "sharing_id": organization_id}
-    else:
-        payload = {"per_page": total_count, "sort_by": "fqdn"}
+    total_count = fake_head.headers.get("total-count", 0)
+    if total_count > 0:
+        payload["per_page"] = total_count
+
     r = requests.get(
         "https://api.gandi.net/v5/domain/domains",
         headers={"authorization": f'Apikey {os.getenv("GANDI_KEY")}'},
