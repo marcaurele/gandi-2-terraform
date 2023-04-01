@@ -37,7 +37,11 @@ def fetch_domains_list(organization_id):
         params=payload,
     )
     fake_head.raise_for_status()
-    total_count = fake_head.headers.get("total-count", 0)
+
+    try:
+        total_count = int(fake_head.headers.get("total-count", 0))
+    except ValueError:
+        total_count = 0
     if total_count > 0:
         payload["per_page"] = total_count
 
