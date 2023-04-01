@@ -1,0 +1,21 @@
+---
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    pull-request-branch-name:
+      separator: "-"
+    schedule:
+      interval: monthly
+  - package-ecosystem: docker
+    directory: /
+    pull-request-branch-name:
+      separator: "-"
+    schedule:
+      interval: monthly
+  - package-ecosystem: pip
+    directory: /
+    pull-request-branch-name:
+      separator: "-"
+    schedule:
+      interval: monthly
