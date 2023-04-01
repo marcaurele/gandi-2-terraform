@@ -77,6 +77,7 @@ def parse_content(content):
             entries.get(key).values.append(value)
         else:
             entries[key] = Record(r_name, r_type, ttl, value)
+
     return entries
 
 
@@ -90,14 +91,15 @@ def generate_tf(domain, entries, subdir):
         filename_tfimport = f"./{domain}/main.tfimport"
     else:
         filename = f"{domain}.tf"
-    tf_name = domain.replace(".", "_")
+
     # TF resource can't start with a number, it should start with either _ or a letter
-    # so domain like 1984.com can have a valid file.
+    tf_name = domain.replace(".", "_")
     try:
         int(tf_name[0])
         tf_name = "_" + tf_name
     except ValueError:
         pass
+
     commands = []
     with click.open_file(filename, "w") as f:
         f.write("locals {\n")
@@ -131,10 +133,12 @@ def generate_tf(domain, entries, subdir):
         f.write("  type   = each.value.type\n")
         f.write("  values = each.value.values\n")
         f.write("}\n")
-    if subdir is True:
-        with click.open_file(filename_tfimport, "w") as fi:
+
+    if subdir:
+        with click.open_file(filename_tfimport, "w") as f:
             for cmd in commands:
-                fi.write(f"{cmd}\n")
+                f.write(f"{cmd}\n")
+
     return commands
 
 
@@ -172,7 +176,8 @@ def generate(domains, version, organization_id, subdir):
         content = fetch_records(domain)
         entries = parse_content(content)
         commands += generate_tf(domain, entries, subdir)
-    if subdir is False:
+
+    if not subdir:
         for cmd in commands:
             click.echo(cmd)
 
