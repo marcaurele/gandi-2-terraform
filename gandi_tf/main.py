@@ -26,7 +26,7 @@ def fetch_records(domain):
 
 
 def fetch_domains_list(organization_id):
-    payload = {"per_page": 1, "sort_by": "fqdn"}
+    payload = {"per_page": 1, "sort_by": "fqdn", "nameserver": "livedns"}
     if organization_id is not None:
         payload["sharing_id"] = organization_id
 
