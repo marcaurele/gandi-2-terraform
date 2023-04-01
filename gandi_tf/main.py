@@ -144,10 +144,12 @@ def generate_tf(domain, entries, subdir):
 def generate(domains, version, organization_id, subdir):
     """
     Command to read Gandi.net live DNS records and generate corresponding TF
-    gandi_livedns_record resources.
+    gandi_livedns_record resources. If no domain name is given, it will fetch
+    all available, optionally filtered by the organiyation id.
 
-    Warning: nameserver type 'other' and 'abc' can't be managed via terraform
-    (for abc domain you can transfer them to livedns on gandi webinterface).
+    Warning: nameserver type 'other' and 'abc' cannot be managed via the gandi
+    terraform provider, therefore they will not be retrieved.
+    .
     """
     if version:
         import importlib.metadata
