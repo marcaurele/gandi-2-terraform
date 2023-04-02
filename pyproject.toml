@@ -26,12 +26,6 @@ python = ">=3.8.1,<4.0"
 requests = "^2.27.1"
 click = "^8.0.3"
 
-[tool.poetry.dev-dependencies]
-pytest = "^5.2"
-flake8 = "^4.0.1"
-flake8-import-order = "^0.18.1"
-black = "^22.1.0"
-
 [tool.poetry.scripts]
 gandi2tf = "gandi_tf.main:generate"
 
@@ -39,8 +33,11 @@ gandi2tf = "gandi_tf.main:generate"
 "Bug Tracker" = "https://github.com/marcaurele/gandi-2-terraform/issues"
 
 [tool.poetry.group.dev.dependencies]
-pylint = "^2.17.1"
+pytest = "^7.2.2"
 flake8 = "^6.0.0"
+black = "^23.3.0"
+flake8-import-order = "^0.18.2"
+pylint = "^2.17.1"
 
 [tool.black]
 target-version = ["py38", "py39", "py310", "py311"]
