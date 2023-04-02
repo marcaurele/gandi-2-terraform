@@ -44,8 +44,11 @@ jobs:
     - name: Install dependencies
       run: poetry install --no-interaction
 
+    - name: Check with black
+      run: poetry run black --diff --check gandi_tf/ tests/
+
     - name: Lint with flake8
       run: poetry run flake8 --max-line-length 119 gandi_tf/ tests/ --count --show-source --statistics
 
-    - name: Check with black
-      run: poetry run black --diff --check gandi_tf/ tests/
+    - name: Check with pylint
+      run: poetry run pylint gandi_tf/ tests/
