@@ -48,10 +48,10 @@ jobs:
       run: poetry run black --diff --check gandi_tf/ tests/
 
     - name: Lint with flake8
-      run: poetry run flake8 --max-line-length 119 gandi_tf/ tests/ --count --show-source --statistics
+      run: poetry run flake8 gandi_tf/ tests/
 
     - name: Check with pylint
       run: poetry run pylint gandi_tf/ tests/
 
     - name: Check with mypy
-      run: poetry run mypy --non-interactive --install-types gandi_tf/ tests/
+      run: poetry run mypy gandi_tf/ tests/
