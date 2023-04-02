@@ -15,6 +15,37 @@ $ pip install gandi-2-terraform
 $ gandi2tf --help
 ```
 
+### Usage
+
+Yo uneed to provide the Gandi API key as an environment variable `GANDI_KEY` (same as for the TF provider).
+
+```console
+$ export GANDI_KEY=A1b2C3d4E5f6
+```
+
+When no argument is given, it will fetch all available domains for the given API key:
+
+```console
+$ gandi-2tf
+```
+
+Or it can generate the tf configuration file for a single domain:
+
+```console
+$ gandi-2tf example.com
+```
+
+Fetching the domains only owned by a single organization:
+
+```console
+$ gandi-2tf --organization-id 04303337-a1b0-4b96-8bd7-992005a072e9
+```
+
+### Options
+
+* `--organization-id`: in case your API key has access to multiple organization, you can filter the list of domains fetched by a single organization ID (_uuid_).
+* `--subdir`: flag to create a sub directory per domain and generate the `main.tf` inside it with a second file containing all the `import` commands.
+
 ## Configuration
 
 In order to access the DNS records through the API, you have to provide your API key. It uses the same variable name than the [Gandi Terraform](https://registry.terraform.io/providers/go-gandi/gandi/latest) provider `GANDI_KEY`. See [Gandi authentication documentation](https://api.gandi.net/docs/authentication/) of their API on how to generate one.
