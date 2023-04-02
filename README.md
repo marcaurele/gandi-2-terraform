@@ -17,7 +17,7 @@ $ gandi2tf --help
 
 ### Usage
 
-Yo uneed to provide the Gandi API key as an environment variable `GANDI_KEY` (same as for the TF provider).
+You need to provide the Gandi API key as an environment variable `GANDI_KEY` (same as for the TF provider).
 
 ```console
 $ export GANDI_KEY=A1b2C3d4E5f6
