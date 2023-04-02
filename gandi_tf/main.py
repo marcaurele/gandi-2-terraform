@@ -1,11 +1,16 @@
+"""Main module for the CLI."""
 import os
 
 import click
-
 import requests
 
 
+# pylint: disable = too-few-public-methods
 class Record:
+    """
+    Class representing the TF record entries to write out.
+    """
+
     def __init__(self, name, r_type, ttl, value) -> None:
         self.name = name
         self.r_type = r_type
@@ -14,18 +19,26 @@ class Record:
 
 
 def fetch_records(domain):
-    r = requests.get(
+    """
+    Fetch DNS records for a given domain name.
+    """
+    req = requests.get(
         f"https://dns.api.gandi.net/api/v5/domains/{domain}/records",
         headers={
             "X-Api-Key": os.getenv("GANDI_KEY"),
             "Accept": "text/plain",
         },
+        timeout=5,
     )
-    r.raise_for_status()
-    return r.text
+    req.raise_for_status()
+    return req.text
 
 
 def fetch_domains_list(organization_id):
+    """
+    Fetch domains of the API key account, optionally filtered by the given
+    organiyation id.
+    """
     payload = {"per_page": 1, "sort_by": "fqdn", "nameserver": "livedns"}
     if organization_id is not None:
         payload["sharing_id"] = organization_id
@@ -35,6 +48,7 @@ def fetch_domains_list(organization_id):
         "https://api.gandi.net/v5/domain/domains",
         headers={"authorization": f'Apikey {os.getenv("GANDI_KEY")}'},
         params=payload,
+        timeout=5,
     )
     fake_head.raise_for_status()
 
@@ -45,17 +59,20 @@ def fetch_domains_list(organization_id):
     if total_count > 0:
         payload["per_page"] = total_count
 
-    r = requests.get(
+    req = requests.get(
         "https://api.gandi.net/v5/domain/domains",
         headers={"authorization": f'Apikey {os.getenv("GANDI_KEY")}'},
         params=payload,
+        timeout=5,
     )
-    r.raise_for_status()
-    return r.json()
+    req.raise_for_status()
+    return req.json()
 
 
 def parse_content(content):
-    entries = dict()
+    """
+    Parser for the API response to return a list of Record objects."""
+    entries = {}
     for line in content.splitlines():
         words = line.strip().split(" ", maxsplit=4)
         r_name = words[0]
@@ -82,11 +99,16 @@ def parse_content(content):
 
 
 def generate_tf(domain, entries, subdir):
+    """
+    Generate the Terraform files for the gandi provider with gandi_livedns_record
+    resources.
+    """
     if subdir:
         try:
             os.mkdir(f"./{domain}")
         except OSError as error:
-            raise Exception(f"Error in generate_tf os.mkdir failed with error: {error}")
+            click.echo(f"Error in generate_tf os.mkdir failed with error: {error}")
+            raise error
         filename = f"./{domain}/main.tf"
         filename_tfimport = f"./{domain}/main.tfimport"
     else:
@@ -101,21 +123,21 @@ def generate_tf(domain, entries, subdir):
         pass
 
     commands = []
-    with click.open_file(filename, "w") as f:
-        f.write("locals {\n")
-        f.write(f"  {tf_name}_records = " + "{\n")
+    with click.open_file(filename, "w") as file:
+        file.write("locals {\n")
+        file.write(f"  {tf_name}_records = " + "{\n")
 
         for key, record in entries.items():
-            f.write(f"    {key} = {{\n")
-            f.write(f'      name = "{record.name}"\n')
-            f.write(f'      type = "{record.r_type}"\n')
-            f.write(f"      ttl  = {record.ttl}\n")
-            f.write("      values = [\n")
+            file.write(f"    {key} = {{\n")
+            file.write(f'      name = "{record.name}"\n')
+            file.write(f'      type = "{record.r_type}"\n')
+            file.write(f"      ttl  = {record.ttl}\n")
+            file.write("      values = [\n")
 
             for value in record.values:
-                f.write(f'        "{value}",\n')
-            f.write("      ]\n")
-            f.write("    }\n")
+                file.write(f'        "{value}",\n')
+            file.write("      ]\n")
+            file.write("    }\n")
 
             commands.append(
                 "terraform import "
@@ -123,21 +145,21 @@ def generate_tf(domain, entries, subdir):
                 f'"{domain}/{record.name}/{record.r_type}"'
             )
 
-        f.write("  }\n}\n\n")
+        file.write("  }\n}\n\n")
 
-        f.write(f'resource "gandi_livedns_record" "{tf_name}" {{\n')
-        f.write(f"  for_each = local.{tf_name}_records\n\n")
-        f.write(f'  zone = "{domain}"\n\n')
-        f.write("  name   = each.value.name\n")
-        f.write("  ttl    = each.value.ttl\n")
-        f.write("  type   = each.value.type\n")
-        f.write("  values = each.value.values\n")
-        f.write("}\n")
+        file.write(f'resource "gandi_livedns_record" "{tf_name}" {{\n')
+        file.write(f"  for_each = local.{tf_name}_records\n\n")
+        file.write(f'  zone = "{domain}"\n\n')
+        file.write("  name   = each.value.name\n")
+        file.write("  ttl    = each.value.ttl\n")
+        file.write("  type   = each.value.type\n")
+        file.write("  values = each.value.values\n")
+        file.write("}\n")
 
     if subdir:
-        with click.open_file(filename_tfimport, "w") as f:
+        with click.open_file(filename_tfimport, "w") as file:
             for cmd in commands:
-                f.write(f"{cmd}\n")
+                file.write(f"{cmd}\n")
 
     return commands
 
@@ -160,6 +182,7 @@ def generate(domains, version, organization_id, subdir):
     terraform provider, therefore they will not be retrieved.
     """
     if version:
+        # pylint: disable = import-outside-toplevel
         import importlib.metadata
 
         _version = importlib.metadata.version("gandi-2-terraform")
@@ -167,7 +190,7 @@ def generate(domains, version, organization_id, subdir):
         return
 
     if len(domains) == 0:
-        domains = tuple([domain["fqdn_unicode"] for domain in fetch_domains_list(organization_id)])
+        domains = tuple(domain["fqdn_unicode"] for domain in fetch_domains_list(organization_id))
         if len(domains) == 0:
             click.echo("No domain found")
 
@@ -183,4 +206,5 @@ def generate(domains, version, organization_id, subdir):
 
 
 if __name__ == "__main__":
+    # pylint: disable = no-value-for-parameter
     generate()
