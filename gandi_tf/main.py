@@ -37,7 +37,7 @@ def fetch_records(domain):
 def fetch_domains_list(organization_id):
     """
     Fetch domains of the API key account, optionally filtered by the given
-    organiyation id.
+    organization id.
     """
     payload = {"per_page": 1, "sort_by": "fqdn", "nameserver": "livedns"}
     if organization_id is not None:
