@@ -44,9 +44,6 @@ ruff = "^0.0.291"
 target-version = ["py38", "py39", "py310", "py311"]
 line-length = 119
 
-[tool.flake8]
-max-line-length = 119
-
 [tool.pylint]
 max-line-length = 119
 
