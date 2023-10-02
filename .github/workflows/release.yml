@@ -30,3 +30,8 @@ jobs:
       env:
         POETRY_PYPI_TOKEN_PYPI: ${{secrets.PYPI_TOKEN}}
       run: poetry publish
+
+    - name: Publish GH release
+      run: gh release create --generate-notes "$GITHUB_REF_NAME"
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
