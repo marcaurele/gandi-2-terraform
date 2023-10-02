@@ -60,7 +60,7 @@ install_types = true
 [tool.ruff]
 select = ["E", "F"]
 line-length = 119
-target-version = "py311"
+target-version = "py38"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
