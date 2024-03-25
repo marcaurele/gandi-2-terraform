@@ -1,4 +1,5 @@
 """Main module for the CLI."""
+
 import os
 
 import click
