@@ -27,7 +27,8 @@ def fetch_records(domain):
         f"https://dns.api.gandi.net/api/v5/domains/{domain}/records",
         headers={
             "Accept": "text/plain",
-        } | get_authentication_header(),
+        }
+        | get_authentication_header(),
         timeout=5,
     )
     req.raise_for_status()
