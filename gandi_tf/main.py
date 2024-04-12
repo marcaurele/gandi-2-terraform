@@ -71,6 +71,9 @@ def fetch_domains_list(organization_id):
 
 
 def get_authentication_header():
+    """
+    Returns the correct authentication header based on the GANDI_KEY environment variable.
+    """
     key = os.getenv("GANDI_KEY", "")
     header = "Apikey" if len(key) <= 25 else "Bearer"
     return {"Authentication": f"{header} {key}"}
