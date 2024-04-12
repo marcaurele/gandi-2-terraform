@@ -3,9 +3,14 @@ version: '3'
 
 tasks:
   black:
-    desc: Run black on source code
+    desc: Run black
     cmds:
     - poetry run black gandi_tf/ tests/
+
+  build:
+    desc: Poetry build
+    cmds:
+    - poetry build
 
   mypy:
     desc: Run mypy checker
