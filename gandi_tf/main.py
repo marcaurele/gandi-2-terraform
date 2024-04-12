@@ -25,10 +25,7 @@ def fetch_records(domain):
     """
     req = requests.get(
         f"https://dns.api.gandi.net/api/v5/domains/{domain}/records",
-        headers={
-            "X-Api-Key": os.getenv("GANDI_KEY"),
-            "Accept": "text/plain",
-        },
+        headers={**{"Accept": "text/plain"}, **get_authentication_header()},
         timeout=5,
     )
     req.raise_for_status()
@@ -47,7 +44,7 @@ def fetch_domains_list(organization_id):
     # Get total count of domain to fetch them all in one request
     fake_head = requests.get(
         "https://api.gandi.net/v5/domain/domains",
-        headers={"authorization": f'Apikey {os.getenv("GANDI_KEY")}'},
+        headers=get_authentication_header(),
         params=payload,
         timeout=5,
     )
@@ -62,12 +59,21 @@ def fetch_domains_list(organization_id):
 
     req = requests.get(
         "https://api.gandi.net/v5/domain/domains",
-        headers={"authorization": f'Apikey {os.getenv("GANDI_KEY")}'},
+        headers=get_authentication_header(),
         params=payload,
         timeout=5,
     )
     req.raise_for_status()
     return req.json()
+
+
+def get_authentication_header():
+    """
+    Returns the correct authentication header based on the GANDI_KEY environment variable.
+    """
+    key = os.getenv("GANDI_KEY", "")
+    header = "Apikey" if len(key) < 25 else "Bearer"
+    return {"Authorization": f"{header} {key}"}
 
 
 def parse_content(content):
