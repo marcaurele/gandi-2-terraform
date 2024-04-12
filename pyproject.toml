@@ -3,7 +3,7 @@ name = "gandi-2-terraform"
 version = "1.2.1"
 description = "CLI to read Gandi.net live DNS records and generate corresponding TF gandi_livedns_record resources"
 readme = 'README.md'
-license = "MIT"
+license = "AGPL"
 authors = ["Marc-Aurèle Brothier <m@brothier.org>"]
 packages = [
   { include = "gandi_tf" },
@@ -19,7 +19,7 @@ classifiers = [
   "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
-  "License :: OSI Approved :: MIT License"
+  "License :: OSI Approved :: GNU Affero General Public License v3 or later (AGPLv3+)"
 ]
 
 [tool.poetry.dependencies]
