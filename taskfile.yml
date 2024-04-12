@@ -1,0 +1,36 @@
+---
+version: '3'
+
+tasks:
+  black:
+    desc: Run black
+    cmds:
+    - poetry run black gandi_tf/ tests/
+
+  build:
+    desc: Poetry build
+    cmds:
+    - poetry build
+
+  mypy:
+    desc: Run mypy checker
+    cmds:
+    - poetry run mypy gandi_tf/ tests/
+
+  pylint:
+    desc: Run pylint linter
+    cmds:
+    - poetry run pylint gandi_tf/ tests/
+
+  ruff:
+    desc: Run ruff checker
+    cmds:
+    - poetry run ruff check gandi_tf/ tests/
+
+  validate:
+    desc: Run all validators
+    cmds:
+    - task: black
+    - task: mypy
+    - task: pylint
+    - task: ruff
