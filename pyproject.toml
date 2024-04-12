@@ -56,7 +56,7 @@ non_interactive = true
 install_types = true
 
 [tool.ruff]
-select = ["E", "F"]
+lint.select = ["E", "F"]
 line-length = 119
 target-version = "py38"
 
