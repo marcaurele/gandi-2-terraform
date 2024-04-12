@@ -72,8 +72,8 @@ def get_authentication_header():
     Returns the correct authentication header based on the GANDI_KEY environment variable.
     """
     key = os.getenv("GANDI_KEY", "")
-    header = "Apikey" if len(key) <= 25 else "Bearer"
-    return {"Authentication": f"{header} {key}"}
+    header = "Apikey" if len(key) < 25 else "Bearer"
+    return {"Authorization": f"{header} {key}"}
 
 
 def parse_content(content):
