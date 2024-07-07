@@ -48,7 +48,7 @@ jobs:
       run: poetry run black --diff --check gandi_tf/ tests/
 
     - name: Lint with ruff
-      run: poetry run ruff --show-files gandi_tf/ tests/
+      run: poetry run ruff check --show-files gandi_tf/ tests/
 
     - name: Check with pylint
       run: poetry run pylint gandi_tf/ tests/
