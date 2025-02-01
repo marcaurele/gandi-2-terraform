@@ -7,6 +7,9 @@
 > [!IMPORTANT]
 > This repository has been archived as I moved all my domains out of Gandi.net and will not use their services anymore. Therefore I will not be able to keep updating the code if their API changes.
 
+> [!WARNING]
+> This project is archived on pypi.org too and will not receive any further update. The final version is `1.3.3`.
+
 This tool aims to simplify managing DNS recods using Terrafom by making the initial import through a single operation.
 It fetches DNS records from one or multiple domains you own with [Gandi.net](https://gandi.et) and generates TF files with the corresponding records' resources using `gandi_livedns_record` and defining each record in a set (see the example output). It will output all the `terraform import` command to execute for the records.
 
